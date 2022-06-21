@@ -75,6 +75,9 @@ impl GameState for State {
         self.resources.insert(ctx.key);
         // q: "we know for sure a turn state exists - skip error checking"
         // _we_ know, but how does the program know?
+        // almost got `if let` working, to avoid explicit unwrap and possible
+        // runtime panic
+        // > if let Some(current_state) = self.resources.get::<TurnState>() {
         let current_state = *self.resources.get::<TurnState>().unwrap();
         match current_state {
             TurnState::AwaitingInput => self
