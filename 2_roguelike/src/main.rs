@@ -3,16 +3,17 @@
 mod camera;
 mod map;
 mod map_builder;
-mod player;
 
 mod prelude {
     pub use bracket_lib::prelude::*;
+    pub use legion::systems::CommandBuffer;
+    pub use legion::world::SubWorld;
+    pub use legion::*;
     pub const SCREEN_WIDTH: i32 = 80;
     pub const SCREEN_HEIGHT: i32 = 50;
     pub use crate::camera::*;
     pub use crate::map::*;
     pub use crate::map_builder::*;
-    pub use crate::player::*;
 }
 
 use prelude::*;
@@ -21,7 +22,6 @@ pub const DISPLAY_WIDTH: i32 = SCREEN_WIDTH / 2;
 pub const DISPLAY_HEIGHT: i32 = SCREEN_HEIGHT / 2;
 struct State {
     map: Map,
-    player: Player,
     camera: Camera,
 }
 
@@ -31,7 +31,6 @@ impl State {
         let map_builder = MapBuilder::new(&mut rng);
         Self {
             map: map_builder.map,
-            player: Player::new(map_builder.player_start),
             camera: Camera::new(map_builder.player_start),
         }
     }
@@ -43,9 +42,8 @@ impl GameState for State {
         ctx.cls();
         ctx.set_active_console(1);
         ctx.cls();
-        self.player.update(ctx, &self.map, &mut self.camera);
-        self.map.render(ctx, &self.camera);
-        self.player.render(ctx, &self.camera);
+        // TODO: Execute systems
+        // TODO: Render draw buffer
     }
 }
 
