@@ -5,10 +5,9 @@ use crate::prelude::*;
 #[read_component(Player)]
 pub fn player_input(
     ecs: &mut SubWorld,
-    #[resource] map: &Map,
+    commands: &mut CommandBuffer,
     // q: example of trivially_copy_pass_by_ref
     #[resource] key: &Option<VirtualKeyCode>,
-    #[resource] camera: &mut Camera,
     #[resource] turn_state: &mut TurnState,
 ) {
     if let Some(key) = key {
@@ -26,16 +25,19 @@ pub fn player_input(
             //   <(&mut Point, &Player)>::query();
             // we just happen to be fetching the Player component as well in v2
             // (wasteful - since we toss it away in the iterator)
-            let mut players = <(&mut Point, &Player)>::query();
+            let mut players = <(Entity, &mut Point)>::query().filter(component::<Player>());
 
-            players.iter_mut(ecs).for_each(|(pos, _)| {
+            players.iter_mut(ecs).for_each(|(player, pos)| {
                 let destination = *pos + delta;
-                if map.can_enter_tile(destination) {
-                    *pos = destination;
-                    camera.on_player_move(destination);
-                    *turn_state = TurnState::PlayerTurn;
-                }
+                commands.push((
+                    (),
+                    WantsToMove {
+                        entity: *player,
+                        destination,
+                    },
+                ));
             });
+            *turn_state = TurnState::PlayerTurn;
         }
     }
 }
