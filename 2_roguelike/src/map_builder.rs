@@ -23,14 +23,6 @@ impl MapBuilder {
     }
 
     fn fill(&mut self, tile: TileType) {
-        // q: what the heck are we doing here!
-        // * is a dereference - t is a reference &TileType
-        // we want to write to the REFERENCED VAR and not to the reference
-        // a: Vec.iter contents are immutable by default.
-        // need to explicitly use iter_mu to mutate contents of Vec
-        // Conclusion: Rust enforces explicit mutation. Does not assume
-        // you know willy-nilly mutation is bad ("obvious" for experienced devs
-        // but not for new devs)
         self.map.tiles.iter_mut().for_each(|t| *t = tile);
     }
 
@@ -61,7 +53,7 @@ impl MapBuilder {
     }
 
     fn apply_vertical_tunnel(&mut self, y1: i32, y2: i32, x: i32) {
-        use std::cmp::{max, min}; // q: local import??
+        use std::cmp::{max, min}; // q: local scope??
         for y in min(y1, y2)..=max(y1, y2) {
             // ..= is range inclusive
             if let Some(idx) = self.map.try_idx(Point::new(x, y)) {

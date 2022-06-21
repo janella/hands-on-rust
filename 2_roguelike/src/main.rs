@@ -1,12 +1,10 @@
 #![warn(clippy::all, clippy::pedantic, clippy::nursery)]
-// o: when exporting prelude, this applies to all of the modules!
+
 mod camera;
-#[allow(clippy::cast_sign_loss)] // disables a specific rule... for next line?
 mod map;
 mod map_builder;
 mod player;
 
-// q: is `prelude` a standard library module name? (convention?)
 mod prelude {
     pub use bracket_lib::prelude::*;
     pub const SCREEN_WIDTH: i32 = 80;

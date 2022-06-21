@@ -66,6 +66,7 @@ impl Map {
     }
 }
 
+#[allow(clippy::cast_sign_loss)]
 pub const fn get_map_idx(x: i32, y: i32) -> usize {
     ((y * SCREEN_WIDTH) + x) as usize
 }
