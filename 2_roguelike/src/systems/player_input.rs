@@ -6,6 +6,7 @@ use crate::prelude::*;
 pub fn player_input(
     ecs: &mut SubWorld,
     #[resource] map: &Map,
+    // q: example of trivially_copy_pass_by_ref
     #[resource] key: &Option<VirtualKeyCode>,
     #[resource] camera: &mut Camera,
 ) {

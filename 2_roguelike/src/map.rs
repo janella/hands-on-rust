@@ -2,9 +2,6 @@ use crate::prelude::*;
 
 const NUM_TILES: usize = (SCREEN_WIDTH * SCREEN_HEIGHT) as usize;
 
-// q: "smaller types are often faster when you copy them around"
-// Example of a smaller type?
-// q: == is implemented on PartialEq, what is it?
 #[derive(Copy, Clone, PartialEq)]
 pub enum TileType {
     Wall,
