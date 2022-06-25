@@ -19,24 +19,40 @@ pub fn player_input(
             _ => Point::new(0, 0),
         };
 
-        if delta.x != 0 || delta.y != 0 {
-            // q: alternative turbofish?
-            //   <(&mut Point)>::query().filter(component::<Player>());
-            //   <(&mut Point, &Player)>::query();
-            // we just happen to be fetching the Player component as well in v2
-            // (wasteful - since we toss it away in the iterator)
-            let mut players = <(Entity, &mut Point)>::query().filter(component::<Player>());
+        let mut players = <(Entity, &Point)>::query().filter(component::<Player>());
 
-            players.iter_mut(ecs).for_each(|(player, pos)| {
-                let destination = *pos + delta;
+        let (player_entity, destination) = players
+            .iter(ecs)
+            .find_map(|(entity, pos)| Some((*entity, *pos + delta)))
+            // q: generally avoid unwrap?
+            .unwrap();
+
+        let mut enemies = <(Entity, &Point)>::query().filter(component::<Enemy>());
+
+        if delta.x != 0 || delta.y != 0 {
+            let mut hit_something = false;
+            enemies
+                .iter(ecs)
+                .filter(|(_, pos)| **pos == destination)
+                .for_each(|(entity, _)| {
+                    hit_something = true;
+                    commands.push((
+                        (),
+                        WantsToAttack {
+                            attacker: player_entity,
+                            target: *entity,
+                        },
+                    ));
+                });
+            if !hit_something {
                 commands.push((
                     (),
                     WantsToMove {
-                        entity: *player,
+                        entity: player_entity,
                         destination,
                     },
                 ));
-            });
+            }
             *turn_state = TurnState::PlayerTurn;
         }
     }
