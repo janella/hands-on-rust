@@ -1,6 +1,5 @@
 use crate::prelude::*;
 
-use self::chasing::chasing;
 mod chasing;
 mod combat;
 mod end_turn;
