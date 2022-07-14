@@ -1,7 +1,7 @@
 use super::MapArchitect;
 use crate::prelude::*;
 
-const STAGGER_DISTANCE: usize = 40;
+const STAGGER_DISTANCE: usize = 400;
 pub struct DrunkardsWalkArchitect {}
 impl MapArchitect for DrunkardsWalkArchitect {
     fn new(&mut self, rng: &mut RandomNumberGenerator) -> MapBuilder {
@@ -13,11 +13,39 @@ impl MapArchitect for DrunkardsWalkArchitect {
             amulet_start: Point::zero(),
         };
 
+        mb.fill(TileType::Wall);
+        self.drunkard(
+            &Point::new(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2),
+            rng,
+            &mut mb.map,
+        );
         mb
     }
+}
 
-    fn drunkard(&mut self, start: &point, rng: &mut RandomNumberGenerator, map: &mut Map) {
-        let mut drunkard_pos = start.clone();
+impl DrunkardsWalkArchitect {
+    fn drunkard(&mut self, start: &Point, rng: &mut RandomNumberGenerator, map: &mut Map) {
+        let mut drunkard_pos = *start;
         let mut distance_staggered = 0;
+
+        loop {
+            let drunk_idx = map.point2d_to_index(drunkard_pos);
+            map.tiles[drunk_idx] = TileType::Floor;
+
+            match rng.range(0, 4) {
+                0 => drunkard_pos.x -= 1,
+                1 => drunkard_pos.x += 1,
+                2 => drunkard_pos.y -= 1,
+                _ => drunkard_pos.y += 1,
+            }
+            if !map.in_bounds(drunkard_pos) {
+                break;
+            }
+
+            distance_staggered += 1;
+            if distance_staggered > STAGGER_DISTANCE {
+                break;
+            }
+        }
     }
 }
