@@ -47,13 +47,11 @@ impl State {
         spawn_amulet(&mut ecs, map_builder.amulet_start);
 
         map_builder
-            .rooms
+            .monster_spawns
             .iter()
-            .skip(1)
-            .map(Rect::center)
-            .for_each(|pos| spawn_monster(&mut ecs, &mut rng, pos));
-
+            .for_each(|pos| spawn_monster(&mut ecs, &mut rng, *pos));
         resources.insert(map_builder.map);
+
         resources.insert(Camera::new(map_builder.player_start));
         resources.insert(TurnState::AwaitingInput);
 
@@ -75,13 +73,11 @@ impl State {
         spawn_amulet(&mut self.ecs, map_builder.amulet_start);
 
         map_builder
-            .rooms
+            .monster_spawns
             .iter()
-            .skip(1)
-            .map(Rect::center)
-            .for_each(|pos| spawn_monster(&mut self.ecs, &mut rng, pos));
-
+            .for_each(|pos| spawn_monster(&mut self.ecs, &mut rng, *pos));
         self.resources.insert(map_builder.map);
+
         self.resources.insert(Camera::new(map_builder.player_start));
         self.resources.insert(TurnState::AwaitingInput);
     }
