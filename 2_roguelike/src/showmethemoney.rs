@@ -8,7 +8,6 @@ pub fn display(
     monster_spawns: &Vec<Point>,
 ) {
     use colored::*;
-    use std::io::stdin;
     let mut output = vec!['.'; NUM_TILES];
 
     map.tiles.iter().enumerate().for_each(|(idx, t)| match *t {
