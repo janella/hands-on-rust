@@ -91,7 +91,7 @@ impl State {
         ctx.print_color_centered(2, RED, BLACK, "You Died");
         ctx.print_color_centered(42, GREEN, BLACK, "Press 1 to play again.");
 
-        if let Some(VirtualKeyCode::Key1) = ctx.key {
+        if ctx.key == Some(VirtualKeyCode::Key1) {
             self.reset_game_state();
         }
     }
@@ -101,7 +101,7 @@ impl State {
         ctx.print_color_centered(2, RED, BLACK, "You won!");
         ctx.print_color_centered(42, GREEN, BLACK, "Press 1 to play again.");
 
-        if let Some(VirtualKeyCode::Key1) = ctx.key {
+        if ctx.key == Some(VirtualKeyCode::Key1) {
             self.reset_game_state();
         }
     }
