@@ -16,6 +16,12 @@ pub fn player_input(
         Some(it) => it,
         _ => return,
     };
+
+    if *key == VirtualKeyCode::Tab {
+        *turn_state = TurnState::Paused;
+        return;
+    };
+
     let delta = match key {
         VirtualKeyCode::Up => Point::new(0, -1),
         VirtualKeyCode::Down => Point::new(0, 1),

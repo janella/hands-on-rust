@@ -4,6 +4,7 @@ mod camera;
 mod components;
 mod map;
 mod map_builder;
+mod showmethemoney;
 mod spawner;
 mod systems;
 mod turn_state;
@@ -15,6 +16,8 @@ mod prelude {
     pub use legion::*;
     pub const SCREEN_WIDTH: i32 = 80;
     pub const SCREEN_HEIGHT: i32 = 50;
+    pub const NUM_TILES: usize = (SCREEN_WIDTH * SCREEN_HEIGHT) as usize;
+
     pub use crate::camera::*;
     pub use crate::components::*;
     pub use crate::map::*;
@@ -27,6 +30,7 @@ use prelude::*;
 
 pub const DISPLAY_WIDTH: i32 = SCREEN_WIDTH / 2;
 pub const DISPLAY_HEIGHT: i32 = SCREEN_HEIGHT / 2;
+
 struct State {
     ecs: World,
     resources: Resources,
@@ -101,6 +105,31 @@ impl State {
             self.reset_game_state();
         }
     }
+    fn pause(&mut self, ctx: &mut BTerm) {
+        ctx.set_active_console(0);
+        ctx.cls();
+        ctx.set_active_console(2);
+        ctx.print_color_centered(2, RED, BLACK, "Paused. Press ESCAPE to resume");
+
+        if ctx.key == Some(VirtualKeyCode::Tab) {
+            // get the map, start, amulet start, and monster spawns
+            let map = self.resources.get::<Map>().unwrap();
+            let mut player = <&Point>::query().filter(component::<Player>());
+            let player_pos = player.iter(&self.ecs).next().unwrap();
+            let mut amulet = <&Point>::query().filter(component::<AmuletOfYala>());
+            let amulet_pos = amulet.iter(&self.ecs).next().unwrap();
+            let mut monsters = <(&Enemy, &Point)>::query();
+            let monster_pos = monsters
+                .iter(&self.ecs)
+                .map(|(_, point)| *point)
+                .collect::<Vec<Point>>();
+            showmethemoney::display("Map", &map, player_pos, amulet_pos, &monster_pos);
+        } else if ctx.key == Some(VirtualKeyCode::Escape) {
+            ctx.set_active_console(0);
+            ctx.cls();
+            self.resources.insert(TurnState::AwaitingInput);
+        }
+    }
 }
 
 impl GameState for State {
@@ -137,6 +166,7 @@ impl GameState for State {
             TurnState::Victory => {
                 self.victory(ctx);
             }
+            TurnState::Paused => self.pause(ctx),
         }
         render_draw_buffer(ctx).expect("Render error");
     }
