@@ -3,7 +3,12 @@ use crate::prelude::*;
 #[system]
 #[read_component(Player)]
 #[read_component(FieldOfView)]
-pub fn map_render(ecs: &SubWorld, #[resource] map: &Map, #[resource] camera: &Camera) {
+pub fn map_render(
+    ecs: &SubWorld,
+    #[resource] map: &Map,
+    #[resource] camera: &Camera,
+    #[resource] theme: &Box<dyn MapTheme>,
+) {
     let mut fov = <&FieldOfView>::query().filter(component::<Player>());
 
     let player_fov = fov.iter(ecs).next().unwrap();
@@ -26,10 +31,7 @@ pub fn map_render(ecs: &SubWorld, #[resource] map: &Map, #[resource] camera: &Ca
                     DARKGRAY
                 };
                 if let Some(tile) = map.tiles.get(idx) {
-                    let glyph = match tile {
-                        TileType::Floor => to_cp437('.'),
-                        TileType::Wall => to_cp437('#'),
-                    };
+                    let glyph = theme.tile_to_render(map.tiles[idx]);
                     draw_batch.set(pt - offset, ColorPair::new(tint, BLACK), glyph);
                 }
             }
