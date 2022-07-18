@@ -1,10 +1,10 @@
 #![warn(clippy::all, clippy::pedantic, clippy::nursery)]
 
+mod blacksheepwall;
 mod camera;
 mod components;
 mod map;
 mod map_builder;
-mod showmethemoney;
 mod spawner;
 mod systems;
 mod turn_state;
@@ -125,7 +125,7 @@ impl State {
                 .iter(&self.ecs)
                 .map(|(_, point)| *point)
                 .collect::<Vec<Point>>();
-            showmethemoney::display("Map", &map, player_pos, amulet_pos, &monster_pos);
+            blacksheepwall::display("Map", &map, player_pos, amulet_pos, &monster_pos);
         } else if ctx.key == Some(VirtualKeyCode::Escape) {
             ctx.set_active_console(0);
             ctx.cls();
