@@ -33,6 +33,8 @@ pub fn display(
                 '@' => print!("{}", "@".bright_yellow()),
                 'M' => print!("{}", "M".bright_red()),
                 'A' => print!("{}", "A".bright_magenta()),
+                '!' => print!("{}", "!".bright_purple()),
+                '{' => print!("{}", "{".bright_purple()),
                 _ => print!("{}", ".".truecolor(64, 64, 64)),
             }
         }
