@@ -125,12 +125,12 @@ impl State {
                 .iter(&self.ecs)
                 .map(|(_, point)| *point)
                 .collect::<Vec<Point>>();
-            let mut items = <(&Item, &Point)>::query();
+            let mut items = <(&Item, &Point, &Name)>::query();
 
             let item_pos = items
                 .iter(&self.ecs)
-                .map(|(_, point)| *point)
-                .collect::<Vec<Point>>();
+                .map(|(_, point, name)| (*point, name))
+                .collect::<Vec<(Point, &Name)>>();
             blacksheepwall::display("Map", &map, player_pos, amulet_pos, &monster_pos, &item_pos);
         } else if ctx.key == Some(VirtualKeyCode::Escape) {
             ctx.set_active_console(0);

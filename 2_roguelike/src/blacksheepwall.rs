@@ -6,7 +6,7 @@ pub fn display(
     player_start: &Point,
     amulet_start: &Point,
     monster_spawns: &Vec<Point>,
-    item_spawns: &Vec<Point>,
+    item_spawns: &Vec<(Point, &Name)>,
 ) {
     use colored::*;
     let mut output = vec!['.'; NUM_TILES];
@@ -22,7 +22,13 @@ pub fn display(
         output[map.point2d_to_index(*p)] = 'M';
     }
     for p in item_spawns.iter() {
-        output[map.point2d_to_index(*p)] = '!';
+        println!("found {}", p.1 .0);
+        match p.1 .0.as_ref() {
+            // todo fix this - this isn't picking up the names
+            "Health Potion" => output[map.point2d_to_index(p.0)] = '!',
+            "Dungeon Map" => output[map.point2d_to_index(p.0)] = '{',
+            _ => {}
+        }
     }
 
     print!("\x1B[2J"); // CLS!
