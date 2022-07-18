@@ -6,6 +6,7 @@ pub fn display(
     player_start: &Point,
     amulet_start: &Point,
     monster_spawns: &Vec<Point>,
+    item_spawns: &Vec<Point>,
 ) {
     use colored::*;
     let mut output = vec!['.'; NUM_TILES];
@@ -19,6 +20,9 @@ pub fn display(
     output[map.point2d_to_index(*amulet_start)] = 'A';
     for p in monster_spawns.iter() {
         output[map.point2d_to_index(*p)] = 'M';
+    }
+    for p in item_spawns.iter() {
+        output[map.point2d_to_index(*p)] = '!';
     }
 
     print!("\x1B[2J"); // CLS!
