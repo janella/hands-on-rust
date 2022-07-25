@@ -21,16 +21,32 @@ Templates(
             name: "Dungeon Map", 
             glyph: '{', 
             levels: [0,1,2], 
-            provides: Some([("MagicMap")]), 
+            provides: Some([("MagicMap", 6)]), 
             frequency: 1
         ),
         Template(
             entity_type: Item, 
             name: "Rusty Sword", 
-            glyph: '/', 
+            glyph: 's', 
             levels: [0,1,2],  
             frequency: 1,
             base_damage: Some(1)
+        ),
+        Template(
+            entity_type: Item, 
+            name: "Iron Sword", 
+            glyph: 'S', 
+            levels: [0,1,2],  
+            frequency: 1,
+            base_damage: Some(2)
+        ),
+        Template(
+            entity_type: Item, 
+            name: "Greatsword", 
+            glyph: '/', 
+            levels: [1,2],  
+            frequency: 1,
+            base_damage: Some(3)
         ),
         Template(
             entity_type: Enemy, 
