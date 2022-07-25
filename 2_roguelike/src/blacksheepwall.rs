@@ -48,6 +48,7 @@ pub fn display(
                 'A' => print!("{}", "A".bright_magenta()),
                 '!' => print!("{}", "!".bright_purple()),
                 '{' => print!("{}", "{".bright_purple()),
+                '>' => print!("{}", ">".white()),
                 _ => print!("{}", ".".truecolor(64, 64, 64)),
             }
         }
