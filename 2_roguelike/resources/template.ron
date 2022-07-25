@@ -21,16 +21,25 @@ Templates(
             name: "Dungeon Map", 
             glyph: '{', 
             levels: [0,1,2], 
-            provides: Some([("MagicMap", 6)]), 
+            provides: Some([("MagicMap")]), 
             frequency: 1
+        ),
+        Template(
+            entity_type: Item, 
+            name: "Rusty Sword", 
+            glyph: '/', 
+            levels: [0,1,2],  
+            frequency: 1,
+            base_damage: Some(1)
         ),
         Template(
             entity_type: Enemy, 
             name: "Goblin", 
             glyph: 'g', 
-            levels: [0,1,2], 
+            levels: [0], 
             hp: Some(1),
-            frequency: 1
+            frequency: 1,
+            base_damage: Some(1)
         ),
         Template(
             entity_type: Enemy, 
@@ -38,7 +47,26 @@ Templates(
             glyph: 'o', 
             levels: [0,1,2], 
             hp: Some(2),
-            frequency: 1
-        )
+            frequency: 1,
+            base_damage: Some(1)
+        ),
+        Template(
+            entity_type: Enemy, 
+            name: "Ogre", 
+            glyph: 'O', 
+            levels: [1,2], 
+            hp: Some(5),
+            frequency: 1,
+            base_damage: Some(2)
+        ),
+        Template(
+            entity_type: Enemy, 
+            name: "Ettin", 
+            glyph: 'E', 
+            levels: [2], 
+            hp: Some(10),
+            frequency: 1,
+            base_damage: Some(3)
+        ),
     ]
 )
