@@ -14,14 +14,17 @@ pub fn display(
     map.tiles.iter().enumerate().for_each(|(idx, t)| match *t {
         TileType::Floor => output[idx] = '.',
         TileType::Wall => output[idx] = '#',
+        TileType::Exit => output[idx] = '>',
     });
 
     output[map.point2d_to_index(*player_start)] = '@';
-    output[map.point2d_to_index(*amulet_start)] = 'A';
-    for p in monster_spawns.iter() {
+    if amulet_start.x > -1 && amulet_start.y > -1 {
+        output[map.point2d_to_index(*amulet_start)] = 'A';
+    }
+    for p in monster_spawns {
         output[map.point2d_to_index(*p)] = 'M';
     }
-    for p in item_spawns.iter() {
+    for p in item_spawns {
         println!("found {}", p.1 .0);
         match p.1 .0.as_ref() {
             // todo fix this - this isn't picking up the names
